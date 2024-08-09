@@ -10,43 +10,30 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Hello world!
  *
  */
-public class App
-{
-    public static void main(String[] args) throws
-            StudentAlreadyRegisteredException {
+public class App {
+    public static void main(String[] args) throws StudentAlreadyRegisteredException {
+        ApplicationContext ctx = new ClassPathXmlApplicationContext("/beans.xml");
 
-        // Open beans.xml where in this file there is a directive
-        // called component-scan Spring scans the files in the
-        // package declared looking for annotations like
-        // @Component and @Autowired.  Spring will then do the
-        // wiring for you.
+        RegistrationService registrationService = ctx.getBean(RegistrationService.class);
 
-        ApplicationContext ctx =
-                new ClassPathXmlApplicationContext("/beans.xml");
+        // Create and register new students
+        Long studentID1 = registrationService.registerStudent(new Student("Alan", "Turing", "Computer Science"));
+        System.out.println("Student Registered with ID: " + studentID1);
 
+        Long studentID2 = registrationService.registerStudent(new Student("Johannes", "Kepler", "Astronomy"));
+        System.out.println("Student Registered with ID: " + studentID2);
 
+        // Read student
+        Student student = registrationService.getStudentById(studentID1);
+        System.out.println("Retrieved Student: " + student);
 
+        // Update student
+        student.setMajor("Mathematics");
+        boolean updated = registrationService.updateStudentInfo(student);
+        System.out.println("Student Updated: " + updated);
 
-    // Pluck out the Registration Service from Spring. Think
-    // of your application like black box and you are asking
-    // for a component of a certain type.
-    // RegistrationService will already have the
-    //  DataAccessObject injected into it by the time
-    //  you receive this reference
-
-    RegistrationService registrationService =
-            ctx.getBean(RegistrationService.class);
-
-    Long studentID = registrationService.registerStudent(
-            new Student("Alan", "Turing", "Computer Science"));
-
-		System.out.println("Student Registered with ID: "
-                + studentID);
-    Long studentID2 = registrationService.registerStudent(
-            new Student("Johannes", "Kepler", "Astronomy"));
-
-		System.out.println("Student Registered with ID: "
-                + studentID2);
+        // Delete student
+        boolean deleted = registrationService.removeStudent(studentID2);
+        System.out.println("Student Deleted: " + deleted);
+    }
 }
-}
-

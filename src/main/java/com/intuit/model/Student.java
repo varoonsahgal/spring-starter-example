@@ -6,7 +6,7 @@ public class Student {
     private Long id;
     private final String firstName;
     private final String lastName;
-    private final String major;
+    private  String major;
 
     public Student(Long id, String firstName, String lastName,
                    String major) {
@@ -29,6 +29,11 @@ public class Student {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
     public String getFirstName() {
         return firstName;
     }
@@ -39,6 +44,10 @@ public class Student {
 
     public String getMajor() {
         return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     @Override
